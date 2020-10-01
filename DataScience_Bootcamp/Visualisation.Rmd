@@ -1,0 +1,185 @@
+---
+title: "R Course - Visualisation"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+--```{r}
+--plot(cars)
+--```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+## 69 ggplot2
+
+ggplot2 works on layers:
+```{r}
+#install.packages('ggplot2')
+library(ggplot2)
+pl <- ggplot(data = mtcars, aes(x=mpg, y=hp)) +  # data, aesthetics
+      geom_point() +                             # geometries
+      facet_grid(cyl ~ .) +                      # facets
+      stat_smooth() +                            # statistics
+      coord_cartesian(xlim = c(15,25)) +         # coordinates
+      theme_bw()                                 # theme
+pl
+```
+
+install demo data:
+```{r}
+#install.packages('ggplot2movies')
+library(ggplot2movies)
+```
+
+
+## 70 Histogram
+
+start with an example histogram:
+```{r}
+# data & aesthetics
+pl <- ggplot(movies, aes(x = rating))
+# geometries
+#pl <- pl + geom_histogram(binwidth = 0.1, color='red', fill='pink', alpha=0.4)
+pl <- pl + geom_histogram(binwidth = 0.1, aes(fill = ..count..))
+pl <- pl + xlab('Movie rating') + ylab('Count')
+print(pl + ggtitle('Histogram of movie ratings'))
+```
+
+## 71 Scatterplots
+
+```{r}
+pl <- ggplot(mtcars, aes(x = wt, y = mpg))
+#pl <- pl + geom_point(aes(size = hp))  # size depends on 'hp"
+#pl <- pl + geom_point(aes(size = factor(cyl)))  # size depends on 'cyl"
+pl <- pl + geom_point(aes(shape = factor(cyl), color = factor(cyl)), size = 5)  # shape and color depend on 'cyl"
+
+print(pl)
+```
+
+using a color gradient
+```{r}
+pl <- ggplot(mtcars, aes(x = wt, y = mpg))
+pl <- pl + geom_point(aes(color = hp), size = 5)
+pl <- pl + scale_color_gradient(low = 'blue', high = 'red')
+
+print(pl)
+```
+
+## 72 Barplots
+
+```{r}
+pl <- ggplot(mpg, aes(x = class))
+pl <- pl + geom_bar(aes(fill = drv), position = 'dodge')  # position = 'fill'
+
+plot(pl)
+```
+
+## 73 Boxplots
+
+```{r}
+pl <- ggplot(mtcars, aes(x = factor(cyl), y = mpg))
+pl <- pl + geom_boxplot(aes(fill=factor(cyl)))
+pl <- pl + coord_flip()  ## flip orientation
+pl <- pl + theme_bw()  ## theme of background
+print(pl)
+```
+
+## 74 Plotting of two variables
+
+```{r}
+pl <- ggplot(movies, aes(x = year, y = rating))
+pl1 <- pl + geom_bin2d(binwidth = c(2,1))
+pl1 <- pl1 + scale_fill_gradient(high = 'cyan', low = 'blue')
+pl2 <- pl + geom_hex()
+pl2 <- pl2 + scale_fill_gradient(high = 'cyan', low = 'blue')
+pl3 <- pl + geom_density_2d()
+
+print(pl1)
+print(pl2)
+print(pl3)
+```
+
+## 75 Coordinates and faceting
+
+```{r}
+pl <- ggplot(mpg, aes(x = displ, y = hwy))
+pl <- pl + geom_point()
+#pl <- pl + coord_cartesian(xlim = c(1,4), ylim = c(15,30))
+pl <- pl + coord_fixed(ratio = 0.4)
+
+print(pl)
+```
+
+```{r}
+pl <- ggplot(mpg, aes(x = displ, y = hwy))
+pl <- pl + geom_point()
+#pl <- pl + facet_grid(. ~ cyl)
+#pl <- pl + facet_grid(drv ~ .)
+pl <- pl + facet_grid(drv ~ cyl)
+
+print(pl)
+```
+
+## 76 Themes
+
+```{r}
+#install.packages('ggthemes')
+library(ggthemes)
+```
+
+```{r}
+pl <- ggplot(mtcars, aes(x = wt, y = mpg))
+pl <- pl + geom_point()
+pl <- pl + theme_economist()
+
+print(pl)
+```
+
+## 77 Exercises
+
+```{r}
+library(ggplot2)
+library(ggthemes)
+head(mpg)
+```
+
+1 - histogram of 'hwy' from "mpg"
+```{r}
+pl <- ggplot(mpg, aes(x = hwy))
+pl <- pl + geom_histogram(fill="red", alpha = 0.4) #binwidth = 0.1, aes(fill = ..count..))
+#pl <- pl + xlab('Movie rating') + ylab('Count')
+print(pl + ggtitle('Histogram'))
+
+```
+
+2 - barplot of car counts per manufacturer with color fill defined by cyl count
+
+```{r}
+pl <- ggplot(mpg, aes(x = manufacturer))
+pl <- pl + geom_bar(aes(fill = factor(cyl))) #, position = 'dodge')  # position = 'fill'
+pl <- pl + theme_gdocs()
+plot(pl)
+```
+
+3 - scatterplot of txhousing data set
+```{r}
+head(txhousing)
+pl <- ggplot(txhousing, aes(x = sales, y = volume))
+pl <- pl + geom_point(color = "blue", alpha = 0.5)
+print(pl)
+```
+
+```{r}
+head(txhousing)
+pl <- ggplot(txhousing, aes(x = sales, y = volume))
+pl <- pl + geom_point(color = "blue", alpha = 0.5)
+pl <- pl + geom_smooth(color = "red")
+print(pl)
+```

@@ -1,0 +1,147 @@
+---
+title: "R Course - Functions and Features"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+--```{r}
+--plot(cars)
+--```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+## 56 Built-in features
+
+seq(): Create sequences
+sort(): Sort a vector
+rev(): Reverse elements in object
+str(): Show the structure of an object
+append(): Merge objects together (works on vectors and lists)
+
+```{r}
+# seq(start,end,step size)
+seq(0, 100, by = 3)
+```
+
+```{r}
+v <- c(1,4,6,7,2,13,2)
+print(sort(v))
+print(sort(v,decreasing = TRUE))
+```
+
+```{r}
+print(v)
+print(rev(v))
+```
+
+```{r}
+str(v)
+```
+
+```{r}
+append(v, rev(v))
+```
+
+## 57 Apply
+
+sample random numbers from a range:
+```{r}
+print(sample(x=1:100, 5))
+```
+
+example:
+```{r}
+v <- 1:5
+addrandom <- function(x) {
+  r <- sample(1:100,1)
+  return (x + r)
+}
+
+#print(addrandom(9))
+help(lapply)
+lapply(v, addrandom)
+sapply(v, addrandom)
+vapply(v, addrandom, v[1])
+```
+
+example:
+```{r}
+v <- 1:5
+times2 <- function(x) {
+  return (x %*% 2)  # integer multiplication
+}
+lapply(v, times2)
+sapply(v, times2)
+#vapply(v, times2, v[1])  ## can't get the types right
+```
+
+anonymous functions:
+```{r}
+v <- 1:5
+sapply(v, function (x) {x %*% 2})
+```
+
+multiple function arguments:
+```{r}
+v <- 1:5
+add_choice <- function (x, choice) {
+  return (x + choice)
+}
+sapply(v, add_choice, choice=7)
+```
+
+## 58 Math functions
+
+abs()
+sum()
+mean()
+round()
+
+## 59 Search text
+
+grepl()  ## logical grep
+grep()
+
+## 60 Dates and timestamps
+
+```{r}
+Sys.Date()
+c <- "1990-03-31"
+class(c)
+my.date <- as.Date(c)
+class(my.date)
+print(my.date)
+```
+
+dates with formats:
+
+Code	Value
+%d	Day of the month (decimal number)
+%m	Month (decimal number)
+%b	Month (abbreviated)
+%B	Month (full name)
+%y	Year (2 digit)
+%Y	Year (4 digit)
+
+```{r}
+my.date <- as.Date("Nov-15-05", format = "%b-%d-%y")
+print(my.date)
+```
+
+POSIX timestamp:
+```{r}
+print(as.POSIXct("19:47:03", format = "%H:%M:%S"))
+```
+
+```{r}
+help(strptime)
+strptime("19:47:03", format = "%H:%M:%S")
+```
+
