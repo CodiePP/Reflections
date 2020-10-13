@@ -1,0 +1,6 @@
+## launch "priceWatch"
+
+```
+R -e shiny::runApp("priceWatch.R", port=8345)
+```
+
