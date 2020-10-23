@@ -1,6 +1,11 @@
 ## launch "priceWatch"
 
 ```
-R -e shiny::runApp("priceWatch.R", port=8345)
+R -e 'shiny::runApp("priceWatch.R", port=8345)'
 ```
 
+## launch "portfolioValuation"
+
+```
+R -e 'shiny::runApp("portfolioValuation.R", port=8778)'
+```
